@@ -1,0 +1,42 @@
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$ pwd
+/home/rocket/cs515c/unpv13e/ping
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$ make 
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o init_v6.o init_v6.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o main.o main.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o proc_v4.o proc_v4.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o proc_v6.o proc_v6.c
+proc_v6.c: In function ‘proc_v6’:
+proc_v6.c:31:5: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+     hlim = *(u_int32_t *)CMSG_DATA(cmsg);
+     ^
+proc_v6.c:37:5: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘ssize_t’ [-Wformat=]
+     icmp6->icmp6_seq);
+     ^
+proc_v6.c:46:5: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘ssize_t’ [-Wformat=]
+     icmp6->icmp6_type, icmp6->icmp6_code);
+     ^
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o readloop.o readloop.c
+readloop.c: In function ‘readloop’:
+readloop.c:15:2: warning: ignoring return value of ‘setuid’, declared with attribute warn_unused_result [-Wunused-result]
+  setuid(getuid());  /* don't need special permissions any more */
+  ^
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o send_v4.o send_v4.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o send_v6.o send_v6.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o sig_alrm.o sig_alrm.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall   -c -o tv_sub.o tv_sub.c
+gcc -I../lib -g -O2 -D_REENTRANT -Wall -o ping init_v6.o main.o proc_v4.o proc_v6.o readloop.o send_v4.o send_v6.o sig_alrm.o tv_sub.o ../libunp.a -lpthread
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$ ./ping 
+usage: ping [ -v ] <hostname>
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$ ./ping google.com
+PING google.com (74.125.239.133): 56 data bytes
+socket error: Operation not permitted
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$ sudo ./ping google.com
+[sudo] password for rocket: 
+PING google.com (74.125.239.132): 56 data bytes
+64 bytes from 74.125.239.132: seq=0, ttl=52, rtt=52.371 ms
+64 bytes from 74.125.239.132: seq=1, ttl=52, rtt=73.004 ms
+64 bytes from 74.125.239.132: seq=2, ttl=52, rtt=94.196 ms
+64 bytes from 74.125.239.132: seq=3, ttl=52, rtt=34.249 ms
+64 bytes from 74.125.239.132: seq=4, ttl=52, rtt=32.998 ms
+64 bytes from 74.125.239.132: seq=5, ttl=52, rtt=53.661 ms
+rocket@galaxy-xyz:~/cs515c/unpv13e/ping$
